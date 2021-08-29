@@ -7,9 +7,15 @@ const { config, engine } = require('express-edge');
 
 const express = require('express')
 
+//setting up Database connection 
+const mongoose = require('mongoose')
+
 
 //creating app
 const app = new express()
+
+//conecting
+mongoose.connect('mongodb://localhost/nodeJS-blog')
 
 app.use(express.static('public')) //public directory
 
