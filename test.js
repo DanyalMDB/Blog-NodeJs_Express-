@@ -22,7 +22,7 @@ Post.find({}, function (err, docs) {
 });
 
 */
-
+/*
 Post.findById("612be4226211c9b3b53800fb", function (err, post) {
     if (err){
         console.log(err);
@@ -31,8 +31,28 @@ Post.findById("612be4226211c9b3b53800fb", function (err, post) {
         console.log("Result : ", post);
     }
 });
+*/
 
 
+   /*
+    Post.findByIdAndUpdate("612be4226211c9b3b53800fb",{ title :'Updating my first post'}, function (err, post) {
+        if (err){
+            console.log("Error: " , err)
+        }
+        else{
+            console.log("Result : ", post)
+        }
+    });
+*/
+    Post.remove({
+        title: "Updating my first post"
+    },(error,post)=>{
+        console.log(error,post)
+    }
+    )
+    Post.deleteOne({ title: 'My second blog post' }, (error, post) => { 
+        console.log(error, post)
+    })
 /*
 //extracting specfic data
 Post.find({
