@@ -51,8 +51,11 @@ app.get('/contact',(req,res) =>{
 app.get('/about',(req,res) =>{
     res.render('about')
 })
-app.get('/post',(req,res) =>{
-    res.render('post')
+app.get('/post/:id',async (req,res) =>{
+    const post = await Post.findById(req.params.id)
+    res.render('post',{
+        post
+    })
 })
 app.get('/posts/new',(req,res) =>{
     res.render('create')
