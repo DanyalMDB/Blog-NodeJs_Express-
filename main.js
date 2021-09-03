@@ -10,6 +10,8 @@ const express = require('express')
 //setting up Database connection 
 const mongoose = require('mongoose')
 
+//BodyParser middleware
+const bodyParser = require('body-parser')
 
 //creating app
 const app = new express()
@@ -20,6 +22,11 @@ mongoose.connect('mongodb://localhost/nodeJS-blog')
 app.use(express.static('public')) //public directory
 
 app.use(engine)
+
+//bodyParser Json Format
+app.use(bodyParser.json)
+app.use(bodyParser.urlencoded({extended: true}))
+
 
 app.set('views',`${__dirname}/views`)
 
@@ -42,10 +49,13 @@ app.get('/post',(req,res) =>{
 app.get('/posts/new',(req,res) =>{
     res.render('create')
 })
-
+app.post('/posts/store',(req,res)=>{
+    console.log(req.body)// getting all data  
+    res.redirect('/')
+})
 
 //server
-app.listen(4200,()=>{
+app.listen(4000,()=>{
     console.log("App listening")
 })
 
