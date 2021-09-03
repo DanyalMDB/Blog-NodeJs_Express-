@@ -37,8 +37,12 @@ app.set('views',`${__dirname}/views`)
 
 
 //setting up pages
-app.get('/',(req,res) =>{
-    res.render('index')
+app.get('/', async (req,res) =>{
+    const posts= await Post.find({}) //finding all the post from the database
+    console.log(posts)
+    res.render('index',{
+        posts
+    })
 })
  
 app.get('/contact',(req,res) =>{
