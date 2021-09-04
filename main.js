@@ -14,6 +14,7 @@ const mongoose = require('mongoose')
 
 var bodyParser = require('body-parser')
 
+const fileUpload = require('express-fileupload')
 
 const Post = require('./database/models/Post')
 
@@ -22,6 +23,9 @@ const app = new express()
 
 //conecting
 mongoose.connect('mongodb://localhost/nodeJS-blog')
+
+
+app.use(fileUpload())
 
 app.use(express.static('public')) //public directory
 
@@ -33,7 +37,6 @@ app.use(bodyParser.urlencoded({extended:true}))
 
 
 app.set('views',`${__dirname}/views`)
-
 
 
 //setting up pages
@@ -61,9 +64,18 @@ app.get('/posts/new',(req,res) =>{
     res.render('create')
 })
 app.post('/posts/store',(req,res)=>{
-    Post.create(req.body, (error, post)=>{
-        res.redirect('/')
+   
+    const {image} = req.files
+    //puting image on this location 
+    image.mv(path.resolve(__dirname, 'public/assets/img', image.name),(error)=>{
+        //create post in database
+        Post.create(req.body, (error, post)=>{
+            //redirecting to the home
+            res.redirect('/')
+        })
     })
+
+  
     
 })
 
