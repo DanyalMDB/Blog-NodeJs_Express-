@@ -69,10 +69,13 @@ app.post('/posts/store',(req,res)=>{
     //puting image on this location 
     image.mv(path.resolve(__dirname, 'public/assets/img', image.name),(error)=>{
         //create post in database
-        Post.create(req.body, (error, post)=>{
-            //redirecting to the home
-            res.redirect('/')
-        })
+        Post.create({
+             ...req.body, 
+             image: image.name 
+            },
+             (error,post) => {
+                  res.redirect('/')
+                 })      
     })
 
   
