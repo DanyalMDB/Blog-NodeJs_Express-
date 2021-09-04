@@ -1,7 +1,6 @@
 //installed packed nodemon so server automatically restart after changes
 
 
-const path = require('path')
 
 const { config, engine } = require('express-edge');
 
@@ -16,7 +15,11 @@ var bodyParser = require('body-parser')
 
 const fileUpload = require('express-fileupload')
 
-const Post = require('./database/models/Post')
+const createPostController = require('./controllers/createPost')
+const homePageController = require('./controllers/homePage')
+const storePostController = require('./controllers/storePost')
+const getPostController = require('./controllers/getPost')
+
 
 //creating app
 const app = new express()
@@ -64,47 +67,10 @@ app.set('views',`${__dirname}/views`)
 //app.get(): This function tells the server what to do when get requests at a given route.
 
 //setting up pages
-app.get('/', async (req,res) =>{
-    const posts= await Post.find({}) //finding all the post from the database
-    console.log(posts)
-    res.render('index',{
-        posts
-    })
-})
- 
-app.get('/contact',(req,res) =>{
-    res.render('contact')
-})
-app.get('/about',(req,res) =>{
-    res.render('about')
-})
-app.get('/post/:id',async (req,res) =>{
-    const post = await Post.findById(req.params.id)
-    res.render('post',{
-        post
-    })
-})
-app.get('/posts/new',(req,res) =>{
-    res.render('create')
-})
-app.post('/posts/store',(req,res)=>{
-   
-    const {image} = req.files
-    //puting image on this location 
-    image.mv(path.resolve(__dirname, 'public/assets/img', image.name),(error)=>{
-        //create post in database
-        Post.create({
-             ...req.body, 
-             image: image.name 
-            },
-             (error,post) => {
-                  res.redirect('/')
-                 })      
-    })
-
-  
-    
-})
+app.get('/',homePageController)
+app.get('/posts/new',createPostController) 
+app.get('/post/:id',getPostController)
+app.post('/posts/store',storePostController)
 
 //server
 app.listen(4200,()=>{
