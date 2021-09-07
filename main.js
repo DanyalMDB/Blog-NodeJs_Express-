@@ -19,7 +19,8 @@ const createPostController = require('./controllers/createPost')
 const homePageController = require('./controllers/homePage')
 const storePostController = require('./controllers/storePost')
 const getPostController = require('./controllers/getPost')
-
+const createNewAccount =require('./controllers/createUser')
+const StoreUserAccountController =require('./controllers/storeUser.js')
 
 //creating app
 const app = new express()
@@ -33,17 +34,7 @@ mongoose.connect('mongodb://localhost/nodeJS-blog')
 
 //creating Custom Middleware
 
-const validateCreatePostMiddleware = (req,res,next)=> {
-    
-    if(req.files == null || req.body.username === null ||
-         req.body.title === null || req.body.subtitle === null || 
-         req.body.content === null ){
-             
-        return res.redirect('/posts/new')
-    }
-    
-    next()
-}
+const validateCreatePostMiddleware = require('./middleware/storePost')
 
 app.use(fileUpload())
 
@@ -68,9 +59,12 @@ app.set('views',`${__dirname}/views`)
 
 //setting up pages
 app.get('/',homePageController)
+app.get('/auth/register',createNewAccount)
 app.get('/posts/new',createPostController) 
 app.get('/post/:id',getPostController)
+
 app.post('/posts/store',storePostController)
+app.post('/users/register',StoreUserAccountController)
 
 //server
 app.listen(4200,()=>{
